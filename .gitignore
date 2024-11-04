@@ -17,3 +17,4 @@ analyze*.py
 
 CMakeUserPresets.json
 __pycache__/*
+/profiles/BSMPT/linux-release-x86_64-gcc-20240910

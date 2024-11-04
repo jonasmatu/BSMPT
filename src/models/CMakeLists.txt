@@ -16,7 +16,9 @@ set(header
     ${header_path}/ClassPotentialSM.h
     ${header_path}/ClassPotentialCPintheDark.h
     # Here you can add your new model
-    ${header_path}/ClassTemplate.h)
+    ${header_path}/ClassTemplate.h
+    ${header_path}/ClassPotentialDSParametrised.h
+    ${header_path}/ClassPotentialConformalDM.h)
 
 set(src
     SMParam.cpp
@@ -31,7 +33,9 @@ set(src
     ClassPotentialSM.cpp
     ClassPotentialCPintheDark.cpp
     # Here you can add your new model
-    ClassTemplate.cpp)
+    ClassTemplate.cpp
+    ClassPotentialDSParametrised.cpp
+    ClassPotentialConformalDM.cpp)
 
 add_library(Models ${header} ${src})
 target_link_libraries(Models PUBLIC GSL::gsl Eigen3::Eigen Minimizer

@@ -40,6 +40,8 @@ enum class ModelIDs
 
   // Here you start adding your models
   TEMPLATE,
+  CONFORMALDM,
+  DSPARAMETRISED,
 
   // DO NOT EDIT the part below
   stop
@@ -57,6 +59,8 @@ const std::unordered_map<std::string, ModelIDs> ModelNames{
     {"sm", ModelIDs::SM},
     {"cpinthedark", ModelIDs::CPINTHEDARK},
     {"template", ModelIDs::TEMPLATE},
+    {"conformaldm", ModelIDs::CONFORMALDM},
+    {"dsparametrised", ModelIDs::DSPARAMETRISED},
 };
 
 /**
