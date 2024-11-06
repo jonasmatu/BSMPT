@@ -43,7 +43,7 @@ Class_DSParametrised::Class_DSParametrised(const ISMConstants &smConstants)
   NNeutralHiggs = 1;               // number of neutral Higgs bosons at T = 0
   NChargedHiggs = 0; // number of charged Higgs bosons  at T = 0 (all d.o.f.)
 
-  nPar   = 3; // number of parameters in the tree-Level Lagrangian
+  nPar   = 4; // number of parameters in the tree-Level Lagrangian
   nParCT = 0; // number of parameters in the counterterm potential
 
   nVEV = 1; // number of VEVs to minimize the potential
@@ -159,7 +159,7 @@ void Class_DSParametrised::ReadAndSet(const std::string &linestr,
     ss >> tmp;
   }
 
-  for (int k = 1; k <= 3; k++)
+  for (int k = 1; k <= 4; k++)
   {
     ss >> tmp;
     if (k == 1)
@@ -174,7 +174,7 @@ void Class_DSParametrised::ReadAndSet(const std::string &linestr,
   par[0] = lA;
   par[1] = llambda3;
   par[2] = llambda4;
-  par[4] = lT0;
+  par[3] = lT0;
 
   set_gen(par); // This you have to call so that everything will be set
   return;
@@ -189,7 +189,7 @@ void Class_DSParametrised::set_gen(const std::vector<double> &par)
   lambda3 = par[1]; // Class member is set accordingly to the input parameters
   lambda4 = par[2];
   T0      = par[3];
-  vev = std::sqrt(4.0 * A * T0*T0 / lambda4);
+  vev = std::sqrt(2.0 * A * T0*T0 / lambda4);
   scale = vev;
   vevTreeMin.resize(nVEV);
   vevTree.resize(NHiggs);
@@ -422,9 +422,8 @@ double Class_DSParametrised::VTreeSimplified(const std::vector<double> &v, doubl
 {
   if (not UseVTreeSimplified) return 0;
   double res = 0;
-
   double vIn = v[0];
-  res = A * (T*T - T0*T0)*vIn*vIn  - lambda3 * T * vIn + lambda4 / 4.0 * std::pow(vIn,4);
+  res = A * (T*T - T0*T0)*vIn*vIn  - lambda3 * T * std::pow(vIn,3) + lambda4 / 4.0 * std::pow(vIn,4);
   return res;
 }
 double Class_DSParametrised::VTreeSimplified(const std::vector<double> &v) const
@@ -467,7 +466,7 @@ double Class_DSParametrised::VEff(const std::vector<double> &v,
   }
 
   double resOut = 0;
-  resOut        = VTree(v, diff);
+  resOut        = VTreeSimplified(v, Temp);
   // if (Order != 0 and not UseTreeLevel)
   // {
   //   resOut += CounterTerm(v, diff);

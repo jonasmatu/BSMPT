@@ -51,9 +51,6 @@ public:
   void TripleHiggsCouplings() override;
   std::vector<double> calc_CT() const override;
 
-  // Override the default implementation
-  double VEff(const std::vector<double> &v, double Temp = 0, int diff = 0, int Order = 1) const override;
-
   void SetCurvatureArrays() override;
   bool CalculateDebyeSimplified() override;
   bool CalculateDebyeGaugeSimplified() override;
@@ -62,6 +59,12 @@ public:
   double VCounterSimplified(const std::vector<double> &v) const override;
   void Debugging(const std::vector<double> &input,
                  std::vector<double> &output) const override;
+  
+  double VEff(const std::vector<double> &v,
+	      double Temp = 0,
+	      int diff    = 0,
+	      int Order   = 1) const override;
+
 };
 
 } // namespace Models

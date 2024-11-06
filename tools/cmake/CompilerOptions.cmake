@@ -2,6 +2,8 @@
 # Müller
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
+# TODO: by jonas, for the interface library
+add_compile_options(-fPIC)
 
 add_compile_options(
   $<$<CONFIG:DEBUG>:-DCOMPILEDEBUG=true>

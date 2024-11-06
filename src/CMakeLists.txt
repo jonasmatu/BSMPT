@@ -53,6 +53,13 @@ add_executable(CalcGW prog/CalcGW.cpp)
 target_link_libraries(CalcGW Utility GW MinimumTracer TransitionTracer)
 target_compile_features(CalcGW PUBLIC cxx_std_14)
 
+# TODO: Jonas make this compile into a library to use with gambit.
+# add_executable(Gambit prog/Interface.cpp)
+add_library(BSMPTinterface SHARED prog/Interface.cpp)
+# set_target_properties(BSMPTinterface PROPERTIES VERSION 0.1)
+target_link_libraries(BSMPTinterface Utility GW MinimumTracer TransitionTracer)
+# target_compile_features(BSMPTinterface PUBLIC cxx_std_14)
+
 add_executable(CalcTemps prog/CalcTemps.cpp)
 target_link_libraries(CalcTemps Utility GW MinimumTracer TransitionTracer)
 target_compile_features(CalcTemps PUBLIC cxx_std_14)
