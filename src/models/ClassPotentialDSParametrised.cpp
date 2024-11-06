@@ -152,7 +152,7 @@ void Class_DSParametrised::ReadAndSet(const std::string &linestr,
   std::stringstream ss(linestr);
   double tmp;
 
-  double lA{0}, llambda3{0}, llambda4{0}, lT0{0};
+  double lD{0}, lA{0}, llambda{0}, lT0{0};
 
   if (UseIndexCol)
   {
@@ -163,17 +163,17 @@ void Class_DSParametrised::ReadAndSet(const std::string &linestr,
   {
     ss >> tmp;
     if (k == 1)
-      lA = tmp;
+      lD = tmp;
     else if (k == 2)
-      llambda3 = tmp;
+      lA = tmp;
     else if (k == 3)
-      llambda4 = tmp;
+      llambda = tmp;
     else if (k == 4)
       lT0 = tmp;
   }
-  par[0] = lA;
-  par[1] = llambda3;
-  par[2] = llambda4;
+  par[0] = lD;
+  par[1] = lA;
+  par[2] = llambda;
   par[3] = lT0;
 
   set_gen(par); // This you have to call so that everything will be set
@@ -185,11 +185,11 @@ void Class_DSParametrised::ReadAndSet(const std::string &linestr,
  */
 void Class_DSParametrised::set_gen(const std::vector<double> &par)
 {
-  A     = par[0]; // Class member is set accordingly to the input parameters
-  lambda3 = par[1]; // Class member is set accordingly to the input parameters
-  lambda4 = par[2];
+  D     = par[0]; // Class member is set accordingly to the input parameters
+  A = par[1]; // Class member is set accordingly to the input parameters
+  lambda = par[2];
   T0      = par[3];
-  vev = std::sqrt(2.0 * A * T0*T0 / lambda4);
+  vev = std::sqrt(2.0 * D * T0*T0 / lambda);
   scale = vev;
   vevTreeMin.resize(nVEV);
   vevTree.resize(NHiggs);
@@ -223,7 +223,7 @@ void Class_DSParametrised::write() const
   ss << "Model = " << Model << std::endl;
 
   ss << "The parameters are : " << std::endl;
-  ss << "lambda3 = " << lambda3 <<  std::endl << "lambda4 = " << lambda4 << std::endl;
+  ss << "D = " << D <<  std::endl << "lambda = " << lambda << std::endl;
   ss << "A = " << A << std::endl << "vev = " << vev << std::endl;
   ss << "T0 = " << T0 << std::endl;
 
@@ -423,7 +423,7 @@ double Class_DSParametrised::VTreeSimplified(const std::vector<double> &v, doubl
   if (not UseVTreeSimplified) return 0;
   double res = 0;
   double vIn = v[0];
-  res = A * (T*T - T0*T0)*vIn*vIn  - lambda3 * T * std::pow(vIn,3) + lambda4 / 4.0 * std::pow(vIn,4);
+  res = D * (T*T - T0*T0)*vIn*vIn  - A / 3.0 * T * std::pow(vIn,3) + lambda / 4.0 * std::pow(vIn,4);
   return res;
 }
 double Class_DSParametrised::VTreeSimplified(const std::vector<double> &v) const

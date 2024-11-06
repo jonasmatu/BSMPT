@@ -27,7 +27,7 @@ using namespace std;
 using namespace BSMPT;
 
 
-extern "C" {double getNuclTemp(double A, double lambda3, double lambda4, double T0)
+extern "C" {double getNuclTemp(double D, double A, double lambda, double T0)
 try
 {
   // Parameters:
@@ -68,7 +68,7 @@ try
   std::vector<std::string> legend;
 
   // Prepare input for the model
-  linestr = std::to_string(A) + "\t" + std::to_string(lambda3) + "\t" + std::to_string(lambda4) + "\t" + std::to_string(T0);
+  linestr = std::to_string(D) + "\t" + std::to_string(A) + "\t" + std::to_string(lambda) + "\t" + std::to_string(T0);
   linestr_store = linestr;
   modelPointer->setUseIndexCol(linestr_store);
 

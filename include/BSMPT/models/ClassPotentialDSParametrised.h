@@ -33,7 +33,7 @@ public:
   // potential Add here your variables in which you will save the Debye
   // correction factors
 
-  double A, lambda3, lambda4, T0;
+  double A, D, lambda, T0;
   // Derived parameters
   double vev, Tc;
 

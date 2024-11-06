@@ -18,3 +18,14 @@ analyze*.py
 CMakeUserPresets.json
 __pycache__/*
 /profiles/BSMPT/linux-release-x86_64-gcc-20240910
+/libBSMPTinterface.so
+/out.dat
+/plotter.py
+/test
+/testInterface.cpp
+/testInterface.py
+/testinput.dat
+/inputConformal.dat
+/include/BSMPTinterface.h
+/createPhasediagram.py
+/compile_commands.json
