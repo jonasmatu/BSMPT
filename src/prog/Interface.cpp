@@ -27,29 +27,9 @@ using namespace std;
 using namespace BSMPT;
 
 
-// vector<double> getGWParams(double gDM, double yDM, double vev)
 extern "C" {double getNuclTemp(double A, double lambda3, double lambda4, double T0)
 try
 {
-
-  // auto argparser         = prepare_parser();
-  // argparser.add_input(convert_input(argc, argv));
-  // const CLIOptions args(argparser);
-  // if (not args.good())
-  // {
-  //   return EXIT_FAILURE;
-  // }
-
-  // std::ifstream infile(args.inputfile);
-  // if (!infile.good())
-  // {
-  //   Logger::Write(LoggingLevel::Default,
-  //                 "Input file " + args.inputfile + " not found ");
-  //   return EXIT_FAILURE;
-  // }
-
-  // Logger::Write(LoggingLevel::ProgDetailed, "Found file");
-
   // Parameters:
   const auto SMConstants = GetSMConstants();
   // BSMPT::ModelID::ModelIDs Model{ModelID::ModelIDs::CONFORMALDM};
@@ -83,24 +63,14 @@ try
   std::string linestr, linestr_store;
   int linecounter   = 1;
   std::size_t count = 0;
-  // int num_points    = args.lastline - args.firstline + 1;
 
-  // output contents storage
-  // std::vector<std::stringstream> output_contents;
-  // output_contents.resize(num_points); // reserve one row per point
   std::vector<std::string> transition_history;
   std::vector<std::string> legend;
 
-  // double gDM = 0.9;
-  // double yDM = 0.5;
-  // double vev = 2000.0;
-  // linestr = std::to_string(gDM) + "\t" + std::to_string(yDM) + "\t" + std::to_string(vev);
+  // Prepare input for the model
   linestr = std::to_string(A) + "\t" + std::to_string(lambda3) + "\t" + std::to_string(lambda4) + "\t" + std::to_string(T0);
   linestr_store = linestr;
   modelPointer->setUseIndexCol(linestr_store);
-
-  // convert parameters to string:
-  
 
   std::pair<std::vector<double>, std::vector<double>> parameters =
     modelPointer->initModel(linestr);
@@ -124,6 +94,7 @@ try
 		   true,
 		   WhichTransitionTemperature};
 
+  // Do the calculation of the phase transition
   TransitionTracer trans(input);
 
   auto time = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -133,23 +104,13 @@ try
 		       "Took\t" + std::to_string(time) + " seconds.\n");
 
   auto output = trans.output_store;
-  std::cout << "Finished calculation!!" << std::endl;
 
-
-  // prepare return array
-  int i = 0; // asume only one coexisting phase
-  // This contains: alpha, betaH, Tperc (or tranistion temp), 
-  // std::vector<double> res = {output.vec_gw_data.at(i).alpha.value_or(EmptyValue),
-  // 			     output.vec_gw_data.at(i).beta_over_H.value_or(EmptyValue),
-  // 			     output.vec_gw_data.at(i).trans_temp.value_or(EmptyValue)};
-  
-  double res = output.vec_trans_data.at(i).nucl_temp.value_or(EmptyValue);
+  // Return the nucleation temperature
+  double res = output.vec_trans_data.at(0).nucl_temp.value_or(EmptyValue);
   return res;
-  // return EXIT_SUCCESS;
 }
 catch (int)
 {
-  // std::vector<double> res = {0,0,0};
   double res = 0;
   return res;
   // return EXIT_SUCCESS;
@@ -157,9 +118,7 @@ catch (int)
 catch (exception &e)
 {
   Logger::Write(LoggingLevel::Default, e.what());
-  // std::vector<double> res = {0,0,0};
   double res = 0;
   return res;
-  // return EXIT_FAILURE;
 }
 }
