@@ -4,6 +4,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include "BSMPT/models/ClassPotentialDarkPhoton.h"
 #include <BSMPT/models/ClassPotentialC2HDM.h>
 #include <BSMPT/models/ClassPotentialCPintheDark.h>
 #include <BSMPT/models/ClassPotentialCxSM.h>
@@ -20,6 +21,8 @@
 #include <BSMPT/models/ClassTemplate.h>
 #include <BSMPT/models/ClassPotentialDSParametrised.h>
 #include <BSMPT/models/ClassPotentialConformalDM.h>
+#include <BSMPT/models/ClassPotentialDarkPhoton.h>
+#include <BSMPT/models/ClassPotentialDarkFermion.h>
 #include <BSMPT/utility/Logger.h>
 
 namespace BSMPT
@@ -57,6 +60,12 @@ std::unique_ptr<Class_Potential_Origin> FChoose(ModelIDs choice,
     break;
   case ModelIDs::DSPARAMETRISED:
     return std::make_unique<Class_DSParametrised>(smConstants);
+    break;
+  case ModelIDs::DARKPHOTON:
+    return std::make_unique<Class_DarkPhoton>(smConstants);
+    break;
+  case ModelIDs::DARKFERMION:
+    return std::make_unique<Class_DarkFermion>(smConstants);
     break;
   case ModelIDs::CONFORMALDM:
     return std::make_unique<Class_ConformalDM>(smConstants);

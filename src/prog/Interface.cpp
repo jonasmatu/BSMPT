@@ -27,15 +27,16 @@ using namespace std;
 using namespace BSMPT;
 
 
-extern "C" {double getNuclTemp(double D, double A, double lambda, double T0)
+// extern "C" {double getNuclTemp(double D, double A, double lambda, double T0)
+extern "C" {double getNuclTemp(double gDS, double lambda, double vev, double Tmax)
 try
 {
   // Parameters:
   const auto SMConstants = GetSMConstants();
-  // BSMPT::ModelID::ModelIDs Model{ModelID::ModelIDs::CONFORMALDM};
-  BSMPT::ModelID::ModelIDs Model{ModelID::ModelIDs::DSPARAMETRISED};
+  // BSMPT::ModelID::ModelIDs Model{ModelID::ModelIDs::DARKPHOTON};
+  BSMPT::ModelID::ModelIDs Model{ModelID::ModelIDs::DARKPHOTON};
   // int firstline{0}, lastline{0};
-  double templow{0}, temphigh{50};
+  double templow{0}, temphigh{Tmax};
   double UserDefined_vwall   = 0.95;
   double UserDefined_epsturb = 0.1;
   int MaxPathIntegrations    = 7;
@@ -68,7 +69,9 @@ try
   std::vector<std::string> legend;
 
   // Prepare input for the model
-  linestr = std::to_string(D) + "\t" + std::to_string(A) + "\t" + std::to_string(lambda) + "\t" + std::to_string(T0);
+  // linestr = std::to_string(D) + "\t" + std::to_string(A) + "\t" + std::to_string(lambda) + "\t" + std::to_string(T0);
+  linestr = std::to_string(gDS) + "\t" + std::to_string(lambda) + "\t" + std::to_string(vev);
+  
   linestr_store = linestr;
   modelPointer->setUseIndexCol(linestr_store);
 
@@ -76,6 +79,9 @@ try
     modelPointer->initModel(linestr);
 
   auto start = std::chrono::high_resolution_clock::now();
+
+  CheckEWSymmetryRestoration = 0;
+  CheckNLOStability = 0;
 
   user_input input{modelPointer,
 		   templow,

@@ -42,6 +42,8 @@ enum class ModelIDs
   TEMPLATE,
   CONFORMALDM,
   DSPARAMETRISED,
+  DARKPHOTON,
+  DARKFERMION,
 
   // DO NOT EDIT the part below
   stop
@@ -61,6 +63,8 @@ const std::unordered_map<std::string, ModelIDs> ModelNames{
     {"template", ModelIDs::TEMPLATE},
     {"conformaldm", ModelIDs::CONFORMALDM},
     {"dsparametrised", ModelIDs::DSPARAMETRISED},
+    {"darkphoton", ModelIDs::DARKPHOTON},
+    {"darkfermion", ModelIDs::DARKFERMION},
 };
 
 /**
