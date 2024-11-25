@@ -28,7 +28,7 @@ using namespace BSMPT;
 
 
 // extern "C" {double getNuclTemp(double D, double A, double lambda, double T0)
-extern "C" {double getNuclTemp(double gDS, double lambda, double vev, double Tmax)
+extern "C" {double getNuclTempFullPot(double gDS, double lambda, double vev, double Tmax)
 try
 {
   // Parameters:
@@ -71,6 +71,105 @@ try
   // Prepare input for the model
   // linestr = std::to_string(D) + "\t" + std::to_string(A) + "\t" + std::to_string(lambda) + "\t" + std::to_string(T0);
   linestr = std::to_string(gDS) + "\t" + std::to_string(lambda) + "\t" + std::to_string(vev);
+  
+  linestr_store = linestr;
+  modelPointer->setUseIndexCol(linestr_store);
+
+  std::pair<std::vector<double>, std::vector<double>> parameters =
+    modelPointer->initModel(linestr);
+
+  auto start = std::chrono::high_resolution_clock::now();
+
+  CheckEWSymmetryRestoration = 0;
+  CheckNLOStability = 0;
+
+  user_input input{modelPointer,
+		   templow,
+		   temphigh,
+		   UserDefined_vwall,
+		   perc_prbl,
+		   compl_prbl,
+		   UserDefined_epsturb,
+		   MaxPathIntegrations,
+		   UseMultiStepPTMode,
+		   num_check_pts,
+		   CheckEWSymmetryRestoration,
+		   CheckNLOStability,
+		   WhichMinimizer,
+		   UseMultithreading,
+		   true,
+		   WhichTransitionTemperature};
+
+  // Do the calculation of the phase transition
+  TransitionTracer trans(input);
+
+  auto time = std::chrono::duration_cast<std::chrono::milliseconds>(
+		 std::chrono::high_resolution_clock::now() - start) .count() / 1000.;
+
+  BSMPT::Logger::Write(BSMPT::LoggingLevel::ProgDetailed,
+		       "Took\t" + std::to_string(time) + " seconds.\n");
+
+  auto output = trans.output_store;
+
+  // Return the nucleation temperature
+  double res = output.vec_trans_data.at(0).nucl_temp.value_or(EmptyValue);
+  return res;
+}
+catch (int)
+{
+  double res = 0;
+  return res;
+  // return EXIT_SUCCESS;
+}
+catch (exception &e)
+{
+  Logger::Write(LoggingLevel::Default, e.what());
+  double res = 0;
+  return res;
+}
+}
+
+extern "C" {double getNuclTempParametrisedPot(double D, double A, double lambda, double T0, double Tmax)
+try
+{
+  // Parameters:
+  const auto SMConstants = GetSMConstants();
+  BSMPT::ModelID::ModelIDs Model{ModelID::ModelIDs::DSPARAMETRISED};
+  // int firstline{0}, lastline{0};
+  double templow{0}, temphigh{Tmax};
+  double UserDefined_vwall   = 0.95;
+  double UserDefined_epsturb = 0.1;
+  int MaxPathIntegrations    = 7;
+  // std::string inputfile, outputfile;
+  bool UseGSL{Minimizer::UseGSLDefault};
+  bool UseCMAES{Minimizer::UseLibCMAESDefault};
+  bool UseNLopt{Minimizer::UseNLoptDefault};
+  int WhichMinimizer{Minimizer::WhichMinimizerDefault};
+  bool UseMultithreading{false};
+  int UseMultiStepPTMode{-1};
+  int CheckEWSymmetryRestoration{1};
+  double perc_prbl{.71};
+  double compl_prbl{.01};
+  int num_check_pts{10};
+  int CheckNLOStability{1};
+  int WhichTransitionTemperature{
+      3}; // 1 = nucl_approx, 2 = nucl, 3 = perc, 4 = compl
+  
+
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(Model, SMConstants);
+
+  Logger::Write(LoggingLevel::ProgDetailed, "Created modelpointer ");
+
+  std::string linestr, linestr_store;
+  int linecounter   = 1;
+  std::size_t count = 0;
+
+  std::vector<std::string> transition_history;
+  std::vector<std::string> legend;
+
+  // Prepare input for the model
+  linestr = std::to_string(D) + "\t" + std::to_string(A) + "\t" + std::to_string(lambda) + "\t" + std::to_string(T0);
   
   linestr_store = linestr;
   modelPointer->setUseIndexCol(linestr_store);
