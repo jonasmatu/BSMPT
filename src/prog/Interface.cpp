@@ -111,6 +111,17 @@ try
 
   auto output = trans.output_store;
 
+  // Check if found a phase transition!
+  if (output.vec_trans_data.size() == 0) {
+    // Verbose output, maybe better to comment out
+    std::cout << "Did not find phase transition for:" << std::endl;
+    std::cout << "gDS    = " << gDS << std::endl;
+    std::cout << "lambda = " << lambda << std::endl;
+    std::cout << "vev    = " << vev << std::endl;
+    std::cout << "Tmax   = " << Tmax << std::endl;
+    return 0.0;
+  }
+  
   // Return the nucleation temperature
   double res = output.vec_trans_data.at(0).nucl_temp.value_or(EmptyValue);
   return res;
@@ -124,6 +135,12 @@ catch (int)
 catch (exception &e)
 {
   Logger::Write(LoggingLevel::Default, e.what());
+  std::cout << "Encountered exception for: " << std::endl;
+  std::cout << "Did not find phase transition for:" << std::endl;
+  std::cout << "gDS    = " << gDS << std::endl;
+  std::cout << "lambda = " << lambda << std::endl;
+  std::cout << "vev    = " << vev << std::endl;
+  std::cout << "Tmax   = " << Tmax << std::endl;
   double res = 0;
   return res;
 }
@@ -210,6 +227,17 @@ try
 
   auto output = trans.output_store;
 
+  // Check if found a phase transition 
+  if (output.vec_trans_data.size() == 0) {
+    std::cout << "Did not find phase transition for:" << std::endl;
+    std::cout << "D      = " << D << std::endl;
+    std::cout << "A      = " << A << std::endl;
+    std::cout << "lambda = " << lambda << std::endl;
+    std::cout << "T0     = " << T0 << std::endl;
+    std::cout << "Tmax   = " << Tmax << std::endl;
+    return 0.0;
+  }
+
   // Return the nucleation temperature
   double res = output.vec_trans_data.at(0).nucl_temp.value_or(EmptyValue);
   return res;
@@ -223,6 +251,12 @@ catch (int)
 catch (exception &e)
 {
   Logger::Write(LoggingLevel::Default, e.what());
+  std::cout << "Encountered exception for:" << std::endl;
+  std::cout << "D      = " << D << std::endl;
+  std::cout << "A      = " << A << std::endl;
+  std::cout << "lambda = " << lambda << std::endl;
+  std::cout << "T0     = " << T0 << std::endl;
+  std::cout << "Tmax   = " << Tmax << std::endl;
   double res = 0;
   return res;
 }
